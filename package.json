@@ -25,5 +25,20 @@
     "devDependencies": {
         "@babel/core": "~7.9.0"
     },
-    "private": true
+    "private": true,
+    "name": "react-native-plus-hooks-2020",
+    "description": "Udemy | Course Material | The Complete React Native + Hooks [2020]",
+    "engines": {
+        "node": "14.15.4",
+        "npm": "7.5.2"
+    },
+    "author": {
+        "name": "Anik Mohammad",
+        "email": "anik7303@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com:Anik7303/react-native-plus-hooks-2020.git"
+    },
+    "license": "MIT"
 }
