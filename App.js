@@ -4,15 +4,17 @@ import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from './src/screens/HomeScreen';
 import ComponentsScreen from './src/screens/ComponentsScreen';
 import ExerciseScreen from './src/screens/ExerciseScreen';
+import ListScreen from './src/screens/ListScreen';
 
 const navigator = createStackNavigator(
     {
         Home: HomeScreen,
         Components: ComponentsScreen,
         Exercise: ExerciseScreen,
+        List: ListScreen,
     },
     {
-        initialRouteName: 'Exercise',
+        initialRouteName: 'List',
         defaultNavigationOptions: {
             title: 'App',
         },
