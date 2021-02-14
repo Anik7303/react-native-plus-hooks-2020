@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View, FlatList } from 'react-native'
 
 import Context from '../contexts/BlogContext'
@@ -7,6 +7,10 @@ import IconButton from '../components/IconButton'
 
 const IndexScreen = ({ navigation }) => {
     const { state, boundActions } = useContext(Context)
+
+    useEffect(() => {
+        boundActions.getBlogPosts()
+    }, [])
 
     return (
         <View style={styles.container}>

@@ -1,7 +1,10 @@
 import createDataContext from './createDataContext'
+import server from '../api/server'
 
 const reducer = (state, action) => {
     switch (action.type) {
+        case 'store_blogposts':
+            return [...action.payload]
         case 'add_blogpost':
             return [...state, action.payload]
         case 'delete_blogpost':
@@ -16,32 +19,48 @@ const reducer = (state, action) => {
     }
 }
 
-const addBlogPost = (dispatch) => (title, content, callback) => {
-    dispatch({
-        type: 'add_blogpost',
-        payload: { id: Math.floor(Math.random() * 999999), title, content },
-    })
-    if (callback) {
-        callback()
+const getBlogPosts = (dispatch) => async (callback) => {
+    try {
+        const response = await server.get('/blogposts')
+        dispatch({ type: 'store_blogposts', payload: response.data })
+        if (callback) callback()
+    } catch (err) {
+        console.error(err.message)
     }
 }
 
-const editBlogPost = (dispatch) => (id, title, content, callback) => {
-    dispatch({
-        type: 'edit_blogpost',
-        payload: { id, title, content },
-    })
-    if (callback) {
-        callback()
+const addBlogPost = (dispatch) => async (title, content, callback) => {
+    try {
+        const response = await server.post('/blogposts', { title, content })
+        dispatch({ type: 'add_blogpost', payload: response.data })
+        if (callback) callback()
+    } catch (err) {
+        console.error(err.message)
     }
 }
 
-const deleteBlogPost = (dispatch) => (id) =>
-    dispatch({ type: 'delete_blogpost', payload: id })
+const editBlogPost = (dispatch) => async (id, title, content, callback) => {
+    try {
+        const res = await server.put(`/blogposts/${id}`, { title, content })
+        dispatch({ type: 'edit_blogpost', payload: res.data })
+        if (callback) callback()
+    } catch (err) {
+        console.error(err.message)
+    }
+}
+
+const deleteBlogPost = (dispatch) => async (id) => {
+    try {
+        await server.delete(`/blogposts/${id}`)
+        dispatch({ type: 'delete_blogpost', payload: id })
+    } catch (err) {
+        console.error(err.message)
+    }
+}
 
 const { Context, Provider } = createDataContext(
     reducer,
-    { addBlogPost, editBlogPost, deleteBlogPost },
+    { addBlogPost, editBlogPost, deleteBlogPost, getBlogPosts },
     []
 )
 
