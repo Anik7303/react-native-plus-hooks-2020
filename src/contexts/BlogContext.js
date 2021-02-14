@@ -4,9 +4,7 @@ import server from '../api/server'
 const reducer = (state, action) => {
     switch (action.type) {
         case 'store_blogposts':
-            return [...action.payload]
-        case 'add_blogpost':
-            return [...state, action.payload]
+            return action.payload
         case 'delete_blogpost':
             return state.filter((post) => post.id !== action.payload)
         case 'edit_blogpost':
@@ -30,13 +28,8 @@ const getBlogPosts = (dispatch) => async (callback) => {
 }
 
 const addBlogPost = (dispatch) => async (title, content, callback) => {
-    try {
-        const response = await server.post('/blogposts', { title, content })
-        dispatch({ type: 'add_blogpost', payload: response.data })
-        if (callback) callback()
-    } catch (err) {
-        console.error(err.message)
-    }
+    await server.post('/blogposts', { title, content })
+    if (callback) callback()
 }
 
 const editBlogPost = (dispatch) => async (id, title, content, callback) => {
@@ -50,12 +43,8 @@ const editBlogPost = (dispatch) => async (id, title, content, callback) => {
 }
 
 const deleteBlogPost = (dispatch) => async (id) => {
-    try {
-        await server.delete(`/blogposts/${id}`)
-        dispatch({ type: 'delete_blogpost', payload: id })
-    } catch (err) {
-        console.error(err.message)
-    }
+    await server.delete(`/blogposts/${id}`)
+    dispatch({ type: 'delete_blogpost', payload: id })
 }
 
 const { Context, Provider } = createDataContext(
