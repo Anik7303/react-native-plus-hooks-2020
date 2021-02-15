@@ -1,0 +1,35 @@
+{
+    "name": "react-native-server",
+    "version": "1.0.0",
+    "description": "Backend server for a react-native project",
+    "main": "src/index.js",
+    "type": "commonjs",
+    "scripts": {
+        "start": "node src/index.js",
+        "dev": "nodemon src/index.js"
+    },
+    "keywords": [
+        "Nodejs",
+        "Express",
+        "Backend Server"
+    ],
+    "author": {
+        "name": "Anik Mohammad",
+        "email": "anik7303@gmail.com"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "ssh+git@github.com:Anik7303/react-native-plus-hooks-2020/tree/14-custom-express-api"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "mongoose": "^5.11.16"
+    },
+    "devDependencies": {
+        "dotenv": "^8.2.0",
+        "nodemon": "^2.0.7"
+    }
+}
