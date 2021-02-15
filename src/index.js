@@ -20,19 +20,27 @@ const dbConfigs = {
     useCreateIndex: true,
     // useFindAndModify: false,
 }
-
 mongoose.connect(keys.MONGO_URI, dbConfigs)
 mongoose.connection.on('connected', () => console.log('Connected to MongoDB'))
 mongoose.connection.on('error', (err) => console.error({ db: err }))
 
 // routes
-const { testRoutes } = require('./routes')
+const { authRoutes, trackRoutes } = require('./routes')
 
 // server configuration start
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use(testRoutes)
+app.use(authRoutes)
+app.use('/tracks', trackRoutes)
+
+// error handlers
+app.use((req, res) => {
+    res.status(404).json({ error: '404 Not found' })
+})
+app.use((error, req, res, next) => {
+    res.status(error.statusCode || 500).json({ error: error.message })
+})
 
 app.listen(keys.PORT, () => console.log(`server running on port ${keys.PORT}`))
