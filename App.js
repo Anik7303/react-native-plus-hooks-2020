@@ -11,8 +11,9 @@ import TrackCreateScreen from './src/screens/TrackCreateScreen'
 import TrackListScreen from './src/screens/TrackListScreen'
 import TrackDetailScreen from './src/screens/TrackDetailScreen'
 import { Provider as AuthProvider } from './src/contexts/AuthContext'
+import { setNavigator } from './src/navigationRef'
 
-const loginStack = createStackNavigator(
+const loginFlow = createStackNavigator(
     {
         Signin: SigninScreen,
         Signup: SignupScreen,
@@ -20,7 +21,7 @@ const loginStack = createStackNavigator(
     { initialRouteName: 'Signin' }
 )
 
-const trackListStack = createStackNavigator(
+const trackListFlow = createStackNavigator(
     {
         TrackList: TrackListScreen,
         TrackDetail: TrackDetailScreen,
@@ -28,15 +29,15 @@ const trackListStack = createStackNavigator(
     { initialRouteName: 'TrackList' }
 )
 
-const mainStack = createBottomTabNavigator({
-    trackListStack,
+const mainFlow = createBottomTabNavigator({
+    trackListFlow,
     TrackCreate: TrackCreateScreen,
     Account: AccountScreen,
 })
 
 const navigator = createSwitchNavigator({
-    loginStack,
-    mainStack,
+    loginFlow,
+    mainFlow,
 })
 
 const App = createAppContainer(navigator)
@@ -44,7 +45,7 @@ const App = createAppContainer(navigator)
 const AppProvider = () => (
     <AuthProvider>
         <StatusBar style="auto" />
-        <App />
+        <App ref={(navigator) => setNavigator(navigator)} />
     </AuthProvider>
 )
 

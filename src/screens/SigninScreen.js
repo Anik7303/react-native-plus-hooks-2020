@@ -11,10 +11,9 @@ const SigninScreen = ({ navigation }) => {
 
     const handleSubmit = () => {
         if (email && password) {
-            actions
-                .signin(email, password)
-                .then(() => navigation.navigate('TrackList'))
-                .catch((err) => console.error({ singin: err }))
+            actions.signin(email, password)
+            // .then(() => navigation.navigate('mainFlow'))
+            // .catch((err) => console.error({ singin: err }))
         }
     }
 
@@ -47,7 +46,7 @@ const SigninScreen = ({ navigation }) => {
                     onPress={() => navigation.navigate('Signup')}
                 >
                     <Text>Don't have an account?</Text>
-                    <Text>Create an Account</Text>
+                    <Text style={styles.link}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -69,6 +68,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     cta: {
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     heading: {
@@ -78,6 +79,11 @@ const styles = StyleSheet.create({
         flex: 1,
         maxHeight: 500,
         justifyContent: 'center',
+    },
+    link: {
+        color: 'blue',
+        fontSize: 16,
+        marginLeft: 5,
     },
 })
 

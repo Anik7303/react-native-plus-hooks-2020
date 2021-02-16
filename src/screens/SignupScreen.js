@@ -5,17 +5,18 @@ import { Text, Button, Input } from 'react-native-elements'
 import { AuthContext } from '../contexts'
 
 const SignupScreen = ({ navigation }) => {
-    const { actions } = useContext(AuthContext)
+    const { state, actions } = useContext(AuthContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
+    console.log({ state })
+
     const handleSubmit = () => {
         if (email && password && password === confirmPassword) {
-            actions
-                .signup(email, password)
-                .then(() => navigation.navigate('TrackList'))
-                .catch((err) => console.error({ signup: err.message }))
+            actions.signup(email, password)
+            // .then(() => navigation.navigate('mainFlow'))
+            // .catch((err) => console.error({ signup: err.message }))
         }
     }
 
@@ -56,7 +57,7 @@ const SignupScreen = ({ navigation }) => {
                     onPress={() => navigation.navigate('Signin')}
                 >
                     <Text>Already have an account?</Text>
-                    <Text>Sign In</Text>
+                    <Text style={styles.link}>Sign In</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -78,6 +79,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     cta: {
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     heading: {
@@ -87,6 +90,11 @@ const styles = StyleSheet.create({
         flex: 1,
         maxHeight: 600,
         justifyContent: 'center',
+    },
+    link: {
+        color: 'blue',
+        fontSize: 16,
+        marginLeft: 5,
     },
 })
 
