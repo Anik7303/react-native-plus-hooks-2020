@@ -5,11 +5,13 @@ const jwt = require('jsonwebtoken')
 const keys = require('../config')
 // User model
 const User = mongoose.model('user')
+// utility functions
+const { createError } = require('../utils')
 
 module.exports = (req, res, next) => {
     const { authorization } = req.headers
     if (!authorization) {
-        const err = new Error("You're not authorized to access this")
+        const err = createError("You're not authorized to access this", 401)
         return next(err)
     }
 

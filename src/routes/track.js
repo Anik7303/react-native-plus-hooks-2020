@@ -6,6 +6,8 @@ const Track = mongoose.model('track')
 
 // middlewares
 const { requireAuth } = require('../middlewares')
+// utility functions
+const { createError } = require('../utils')
 
 const router = express.Router()
 
@@ -16,7 +18,8 @@ router.get('/', async (req, res, next) => {
         const tracks = await Track.find({ userId: req.user._id })
         res.status(200).json(tracks)
     } catch (err) {
-        next(err)
+        const error = createError(err.message)
+        next(error)
     }
 })
 
@@ -24,11 +27,10 @@ router.post('/', async (req, res, next) => {
     try {
         const { name, locations } = req.body
         if (!name || !locations || locations.length === 0) {
-            const err = new Error(
-                `You must provide a 'name' and a list of 'locations'`
+            throw createError(
+                "You must provide a 'name' and a list of 'locations'",
+                422
             )
-            err.statusCode = 422
-            throw err
         }
 
         const track = new Track({ name, locations, userId: req.user._id })
@@ -36,7 +38,8 @@ router.post('/', async (req, res, next) => {
 
         res.status(201).json(track)
     } catch (err) {
-        next(err)
+        const error = createError(err.message)
+        next(error)
     }
 })
 
@@ -46,15 +49,14 @@ router.delete('/:trackId', async (req, res, next) => {
 
         const track = await Track.findById(trackId)
         if (!track) {
-            const err = new Error('Track not found')
-            err.statusCode = 404
-            throw err
+            throw createError('Track not found', 404)
         }
 
         await track.remove()
         res.status(200).json({ message: `${trackId} successfully deleted` })
     } catch (err) {
-        next(err)
+        const error = createError(err.message)
+        next(error)
     }
 })
 

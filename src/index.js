@@ -40,7 +40,7 @@ app.use((req, res) => {
     res.status(404).json({ error: '404 Not found' })
 })
 app.use((error, req, res, next) => {
-    res.status(error.statusCode || 500).json({ error: error.message })
+    res.status(error.code || 500).json({ error: error.message })
 })
 
 app.listen(keys.PORT, () => console.log(`server running on port ${keys.PORT}`))
