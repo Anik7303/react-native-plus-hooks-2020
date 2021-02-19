@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements'
 
 const TrackListScreen = ({ navigation }) => {
     return (
-        <View>
+        <View style={styles.container}>
             <Text>TrackList Screen</Text>
             <Button
                 title="Go back to signin screen"
@@ -14,6 +14,11 @@ const TrackListScreen = ({ navigation }) => {
     )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#fff',
+        flex: 1,
+    },
+})
 
 export default TrackListScreen
