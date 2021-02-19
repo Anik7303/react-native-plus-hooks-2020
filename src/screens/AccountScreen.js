@@ -1,14 +1,23 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet } from 'react-native'
+import { Button } from 'react-native-elements'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
+import { AuthContext } from '../contexts'
 
 const AccountScreen = () => {
+    const { actions } = useContext(AuthContext)
     return (
-        <View>
-            <Text>Account Screen</Text>
-        </View>
+        <SafeAreaView style={styles.container}>
+            <Button title="Sign Out" onPress={actions.signout} />
+        </SafeAreaView>
     )
 }
 
-export default AccountScreen
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#fff',
+    },
+})
 
-const styles = StyleSheet.create({})
+export default AccountScreen

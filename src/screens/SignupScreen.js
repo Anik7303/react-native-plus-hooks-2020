@@ -1,27 +1,37 @@
 import React, { useState, useContext } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Text, Button, Input } from 'react-native-elements'
+import { NavigationEvents } from 'react-navigation'
 
 import { AuthContext } from '../contexts'
 
 const SignupScreen = ({ navigation }) => {
-    const { state, actions } = useContext(AuthContext)
+    const { actions } = useContext(AuthContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    console.log({ state })
-
     const handleSubmit = () => {
-        if (email && password && password === confirmPassword) {
-            actions.signup(email, password)
-            // .then(() => navigation.navigate('mainFlow'))
-            // .catch((err) => console.error({ signup: err.message }))
+        if (!email || !password) {
+            return actions.setError(
+                422,
+                'Email and Password fields cannot be empty'
+            )
+        } else if (password !== confirmPassword) {
+            return actions.setError(
+                422,
+                "Password and Confirm password doesn't match"
+            )
         }
+        actions.signup(email, password)
     }
 
     return (
         <View style={styles.container}>
+            <NavigationEvents
+                onWillFocus={actions.clearError}
+                onWillBlur={actions.clearError}
+            />
             <Text style={styles.heading} h3>
                 Sign Up with Tracks
             </Text>
@@ -74,6 +84,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     container: {
+        backgroundColor: '#fff',
         padding: 20,
         marginTop: '10%',
         flex: 1,

@@ -1,24 +1,43 @@
-import React, { useState, useContext } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native'
 import { Text, Button, Input } from 'react-native-elements'
 
 import { AuthContext } from '../contexts'
 
 const SigninScreen = ({ navigation }) => {
-    const { actions } = useContext(AuthContext)
+    const { state, actions } = useContext(AuthContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleSubmit = () => {
-        if (email && password) {
-            actions.signin(email, password)
-            // .then(() => navigation.navigate('mainFlow'))
-            // .catch((err) => console.error({ singin: err }))
+    useEffect(() => {
+        const onWillFocusListener = navigation.addListener('willFocus', () => {
+            actions.clearError()
+        })
+        const onWillBlurListener = navigation.addListener('willBlur', () => {
+            actions.clearError()
+        })
+        return () => {
+            if (onWillFocusListener) onWillFocusListener.remove()
+            if (onWillBlurListener) onWillBlurListener.remove()
         }
+    }, [])
+
+    const handleSubmit = () => {
+        if (!email || !password) {
+            return actions.setError(
+                422,
+                'Email and Password fields cannot be empty'
+            )
+        }
+        actions.signin(email, password)
     }
 
     return (
         <View style={styles.container}>
+            {state.error &&
+                Alert.alert(`Error ${state.error.code}`, state.error.message, [
+                    { text: 'Dismiss', onPress: actions.clearError },
+                ])}
             <Text style={styles.heading} h3>
                 Sign In with Tracks
             </Text>
@@ -63,6 +82,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     container: {
+        backgroundColor: '#fff',
         padding: 20,
         marginTop: '10%',
         flex: 1,
