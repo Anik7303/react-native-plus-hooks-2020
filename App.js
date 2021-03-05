@@ -1,21 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import { Provider as AuthProvider } from './src/contexts/AuthContext'
+import { setNavigator } from './src/navigationRef'
+import AccountScreen from './src/screens/Account'
+import ResolveAuthScreen from './src/screens/ResolveAuth'
+import SigninScreen from './src/screens/Signin'
+import SignupScreen from './src/screens/Signup'
+import TrackCreateScreen from './src/screens/TrackCreate'
+import TrackDetailsScreen from './src/screens/TrackDetails'
+import TrackListScreen from './src/screens/TrackList'
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const navigator = createSwitchNavigator(
+    {
+        authFlow: createStackNavigator(
+            {
+                Signin: SigninScreen,
+                Signup: SignupScreen,
+            },
+            {
+                defaultNavigationOptions: {
+                    headerShown: false,
+                },
+            }
+        ),
+        mainFlow: createBottomTabNavigator({
+            trackFlow: createStackNavigator({
+                TrackList: TrackListScreen,
+                TrackDetails: TrackDetailsScreen,
+            }),
+            TrackCreate: TrackCreateScreen,
+            Account: AccountScreen,
+        }),
+        ResolveAuth: ResolveAuthScreen,
+    },
+    { initialRouteName: 'ResolveAuth' }
+)
+
+const Navigator = createAppContainer(navigator)
+
+const App = () => (
+    <AuthProvider>
+        <Navigator ref={(navigator) => setNavigator(navigator)} />
+    </AuthProvider>
+)
+
+export default App
