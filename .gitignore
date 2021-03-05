@@ -5,3 +5,6 @@ src/config/dev.js
 # module files
 /node_modules
 
+# misc
+package-lock.json
+

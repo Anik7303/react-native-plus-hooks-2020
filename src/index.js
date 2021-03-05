@@ -43,4 +43,4 @@ app.use((error, req, res, next) => {
     res.status(error.code || 500).json({ error: error.message })
 })
 
-app.listen(keys.PORT, () => console.log(`server running on port ${keys.PORT}`))
+app.listen(keys.PORT, keys.HOST_IP, () => console.log(`server running on port ${keys.PORT}`))
