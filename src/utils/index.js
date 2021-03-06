@@ -4,5 +4,5 @@ export const getErrorMessage = (error) =>
 export const dispatchError = (dispatch, error) =>
     dispatch({
         type: 'set_error',
-        payload: error.response.data.error || 'Something went wrong',
+        payload: error.response?.data?.error || 'Something went wrong',
     })

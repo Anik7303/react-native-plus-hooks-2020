@@ -3,7 +3,7 @@ import Constants from 'expo-constants'
 import { StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-elements'
 
-import { Context as AuthContext } from '../contexts/AuthContext'
+import { AuthContext } from '../contexts'
 
 const Account = () => {
     const { actions } = useContext(AuthContext)

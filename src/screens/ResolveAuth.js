@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import AppLoading from 'expo-app-loading'
 
-import { Context as AuthContext } from '../contexts/AuthContext'
+import { AuthContext } from '../contexts'
 
 const ResolveAuth = () => {
     const { actions } = useContext(AuthContext)

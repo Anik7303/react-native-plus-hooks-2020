@@ -4,7 +4,7 @@ import { NavigationEvents } from 'react-navigation'
 
 import AuthForm from '../components/AuthForm'
 import NavLink from '../components/NavLink'
-import { Context as AuthContext } from '../contexts/AuthContext'
+import { AuthContext } from '../contexts'
 
 const Signup = ({ navigation }) => {
     const { state, actions } = useContext(AuthContext)

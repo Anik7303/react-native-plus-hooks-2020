@@ -5,6 +5,15 @@ import createDataContext from './createDataContext'
 import { navigate } from '../navigationRef'
 import { dispatchError } from '../utils'
 
+const Action = {
+    RESET: 'reset',
+    RESET_ERROR: 'reset_error',
+    SET_ERROR: 'set_error',
+    SIGNOUT: 'signout',
+    SIGNIN: 'signin',
+    SIGNUP: 'signup',
+}
+
 const initialState = {
     error: null,
     token: null,
@@ -12,33 +21,26 @@ const initialState = {
 
 const TOKEN = 'token'
 
-const authReducer = (state, action) => {
+const reducer = (state, action) => {
     const { type, payload } = action
     switch (type) {
-        case 'reset':
+        case Action.RESET:
             return { ...initialState }
-        case 'reset_error':
+        case Action.RESET_ERROR:
             return { ...state, error: null }
-        case 'set_error':
+        case Action.SET_ERROR:
             return { ...state, error: payload }
-        case 'signin':
-        case 'signup':
-            return { ...initialState, token: payload }
-        case 'signout':
+        case Action.SIGNOUT:
             return { ...state, token: null }
+        case Action.SIGNIN:
+        case Action.SIGNUP:
+            return { ...initialState, token: payload }
         default:
             return state
     }
 }
 
-const tryLocalLogin = (dispatch) => async () => {
-    const token = await AsyncStorage.getItem(TOKEN)
-    if (token) {
-        dispatch({ type: 'signin', payload: token })
-        return navigate('TrackList')
-    }
-    navigate('Signin')
-}
+const resetError = (dispatch) => () => dispatch({ type: Action.RESET_ERROR })
 
 const signin = (dispatch) => async (data) => {
     try {
@@ -46,7 +48,7 @@ const signin = (dispatch) => async (data) => {
 
         await AsyncStorage.setItem(TOKEN, response.data.token)
 
-        dispatch({ type: 'signin', payload: response.data.token })
+        dispatch({ type: Action.SIGNIN, payload: response.data.token })
 
         navigate('TrackList')
     } catch (err) {
@@ -60,7 +62,7 @@ const signup = (dispatch) => async (data) => {
 
         await AsyncStorage.setItem(TOKEN, response.data.token)
 
-        dispatch({ type: 'signup', payload: response.data?.token })
+        dispatch({ type: Action.SIGNUP, payload: response.data?.token })
 
         navigate('TrackList')
     } catch (err) {
@@ -72,7 +74,7 @@ const signout = (dispatch) => async () => {
     try {
         await AsyncStorage.removeItem(TOKEN)
 
-        dispatch({ type: 'signout' })
+        dispatch({ type: Action.SIGNOUT })
 
         navigate('Signin')
     } catch (err) {
@@ -80,12 +82,19 @@ const signout = (dispatch) => async () => {
     }
 }
 
-const resetError = (dispatch) => () => dispatch({ type: 'reset_error' })
+const tryLocalLogin = (dispatch) => async () => {
+    const token = await AsyncStorage.getItem(TOKEN)
+    if (token) {
+        dispatch({ type: Action.SIGNIN, payload: token })
+        return navigate('TrackList')
+    }
+    navigate('Signin')
+}
 
-const { Context, Provider } = createDataContext(
-    authReducer,
-    { resetError, signin, signout, signup, tryLocalLogin },
+const actions = { resetError, signin, signout, signup, tryLocalLogin }
+
+export const { Context, Provider } = createDataContext(
+    reducer,
+    actions,
     initialState
 )
-
-export { Context, Provider }
