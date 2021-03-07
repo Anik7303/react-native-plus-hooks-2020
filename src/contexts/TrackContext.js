@@ -8,7 +8,7 @@ const Action = {
     RESET: 'reset',
     RESET_ERROR: 'reset_error',
     SAVE_TRACK: 'save_track',
-    SAVE_TRACKS: 'save_tracks',
+    FETCH_TRACKS: 'fetch_tracks',
     SET_ERROR: 'set_error',
 }
 
@@ -24,7 +24,7 @@ const reducer = (state, action) => {
             return initialState
         case Action.RESET_ERROR:
             return { ...state, error: null }
-        case Action.SAVE_TRACKS:
+        case Action.FETCH_TRACKS:
             return { ...state, tracks: payload }
         case Action.SET_ERROR:
             return { ...state, error: payload }
@@ -43,10 +43,10 @@ const createTrack = (dispatch) => async (trackInfo) => {
     }
 }
 
-const getTracks = (dispatch) => async () => {
+const fetchTracks = (dispatch) => async () => {
     try {
         const response = await trackerApi.get('/tracks')
-        dispatch({ type: Action.SAVE_TRACKS, payload: response.data })
+        dispatch({ type: Action.FETCH_TRACKS, payload: response.data })
     } catch (err) {
         dispatchError(dispatch, err)
     }
@@ -58,7 +58,7 @@ const resetError = (dispatch) => () => dispatch({ type: Action.RESET_ERROR })
 
 const actions = {
     createTrack,
-    getTracks,
+    fetchTracks,
     reset,
     resetError,
 }

@@ -40,6 +40,7 @@ const Map = () => {
             />
             <Polyline
                 coordinates={locations.map((location) => location.coords)}
+                strokeWidth={4}
             />
         </MapView>
     )

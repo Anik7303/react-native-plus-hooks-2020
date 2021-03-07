@@ -3,6 +3,7 @@ import Constants from 'expo-constants'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-elements'
 import { withNavigationFocus } from 'react-navigation'
+import { FontAwesome5 } from '@expo/vector-icons'
 
 import Map from '../components/Map'
 import TrackForm from '../components/TrackForm'
@@ -22,14 +23,16 @@ const TrackCreate = ({ isFocused }) => {
 
     return (
         <View style={styles.container}>
-            <Text h3 style={styles.text}>
-                TrackCreateScreen
-            </Text>
             <Map />
             {error && <Text style={styles.error}>{error}</Text>}
             <TrackForm />
         </View>
     )
+}
+
+TrackCreate.navigationOptions = {
+    tabBarIcon: <FontAwesome5 name="plus" size={20} />,
+    title: 'Add Track',
 }
 
 const styles = StyleSheet.create({
@@ -40,9 +43,6 @@ const styles = StyleSheet.create({
     error: {
         color: 'red',
         fontSize: 16,
-    },
-    text: {
-        textAlign: 'center',
     },
 })
 
