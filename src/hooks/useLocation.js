@@ -9,18 +9,18 @@ import {
  *
  * @returns an array containing error, location
  */
-const useLocation = () => {
+const useLocation = (shouldTrack) => {
     const [location, setLocation] = useState(null)
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        let unsubscribe
+        let subscriber
         const startWatching = async () => {
             try {
                 const { granted } = await requestPermissionsAsync()
                 if (!granted)
                     setError('Please grant permission to use location services')
-                unsubscribe = await watchPositionAsync(
+                subscriber = await watchPositionAsync(
                     {
                         accuracy: Accuracy.BestForNavigation,
                         distanceInterval: 10,
@@ -33,12 +33,17 @@ const useLocation = () => {
             }
         }
 
-        startWatching()
+        if (shouldTrack) {
+            startWatching()
+        } else {
+            if (subscriber) subscriber.remove()
+            subscriber = null
+        }
 
         return () => {
-            if (unsubscribe) unsubscribe.remove()
+            if (subscriber) subscriber.remove()
         }
-    }, [])
+    }, [shouldTrack])
 
     return [error, location]
 }

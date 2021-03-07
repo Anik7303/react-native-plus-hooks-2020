@@ -3,7 +3,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 
-import { AuthProvider, LocationProvider } from './src/contexts'
+import { AuthProvider, LocationProvider, TrackProvider } from './src/contexts'
 import { setNavigator } from './src/navigationRef'
 import AccountScreen from './src/screens/Account'
 import ResolveAuthScreen from './src/screens/ResolveAuth'
@@ -44,7 +44,9 @@ const Navigator = createAppContainer(navigator)
 const App = () => (
     <AuthProvider>
         <LocationProvider>
-            <Navigator ref={(navigator) => setNavigator(navigator)} />
+            <TrackProvider>
+                <Navigator ref={(navigator) => setNavigator(navigator)} />
+            </TrackProvider>
         </LocationProvider>
     </AuthProvider>
 )
